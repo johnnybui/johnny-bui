@@ -1,0 +1,14 @@
+{
+  "name": "code-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prob4": "npx ts-node src/problem4/index.ts"
+  },
+  "author": "Johnny Bui",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.12.4"
+  }
+}
