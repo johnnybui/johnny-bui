@@ -4,11 +4,29 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prob4": "npx ts-node src/problem4/index.ts"
+    "prob4": "npx ts-node src/problem4/index.ts",
+    "prob5": "npx ts-node src/problem5/app.ts",
+    "prisma:migrate": "cd src/problem5 && npx prisma migrate dev",
+    "prisma:gen": "cd src/problem5 && npx prisma generate",
+    "prisma:seed": "npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node src/problem5/prisma/seed.ts"
   },
   "author": "Johnny Bui",
   "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^5.12.1",
+    "express": "^4.19.2",
+    "prisma": "^5.12.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
+  },
   "devDependencies": {
-    "@types/node": "^20.12.4"
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.4",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "typescript": "^5.4.4"
   }
 }
