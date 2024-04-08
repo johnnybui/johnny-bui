@@ -36,3 +36,7 @@ Please run in steps:
   ```npm run prob5```
 
 - Open http://localhost:3000/api-docs to use and test the server API directly.
+
+### Problem 6
+
+Refer to [Problem 6 README](src/problem6/README.md)
