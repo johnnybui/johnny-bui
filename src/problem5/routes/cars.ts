@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import prisma from '../prisma/client';
+import { Prisma } from '@prisma/client';
 
 const router = express.Router();
 
@@ -8,7 +9,46 @@ const router = express.Router();
  * /api/cars:
  *   get:
  *     summary: Retrieve all cars
- *     description: Retrieve a list of all cars.
+ *     description: Retrieve a list of all cars. Supports search, sorting, and pagination.
+ *     parameters:
+ *       - in: query
+ *         name: make
+ *         schema:
+ *           type: string
+ *         description: Filter cars by make.
+ *       - in: query
+ *         name: model
+ *         schema:
+ *           type: string
+ *         description: Filter cars by model.
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: integer
+ *         description: Filter cars by year.
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: Sort the results by a specific field (e.g., make, model, year).
+ *       - in: query
+ *         name: sortOrder
+ *         schema:
+ *           type: string
+ *           default: asc
+ *         description: Specify the sorting order (asc or desc).
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Specify the page number for pagination.
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Specify the page size for pagination.
  *     responses:
  *       200:
  *         description: A list of cars.
@@ -20,8 +60,38 @@ const router = express.Router();
  *                 $ref: '#/components/schemas/CarResponseObject'
  */
 router.get('/cars', async (req: Request, res: Response) => {
-  const cars = await prisma.car.findMany();
-  res.json(cars);
+  const { make, model, sortBy, sortOrder } = req.query;
+  const year = req.query.year ? parseInt(req.query.year as string) : undefined;
+  const page = req.query.page ? parseInt(req.query.page as string) : 1;
+  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 10;
+
+  const filters: Prisma.CarWhereInput = {};
+  if (make) filters.make = make as string;
+  if (model) filters.model = model as string;
+  if (year) filters.year = year;
+
+  const sortOrderNormalized = sortOrder === 'desc' ? 'desc' : 'asc';
+  const sortByField = sortBy as string || 'id';
+
+  const totalCount = await prisma.car.count({ where: filters });
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  const cars = await prisma.car.findMany({
+    where: filters,
+    orderBy: {
+      [sortByField]: sortOrderNormalized,
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+  });
+
+  res.json({
+    totalCount,
+    totalPages,
+    currentPage: page,
+    pageSize: pageSize,
+    data: cars,
+  });
 });
 
 /**

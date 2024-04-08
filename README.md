@@ -8,7 +8,7 @@
 
 - Run the app to see result
 
-  ```npm run prob4```
+  ```npm run prob4 <n>```
   
 #### Comments on the functions:
 - Closed-form Formula: This implementation is simple and fastest to run since it computes the sum directly. Runtime: Constant.
@@ -35,4 +35,4 @@ Please run in steps:
 
   ```npm run prob5```
 
-- Open http://localhost:3000/api-docs to use and test the server.
+- Open http://localhost:3000/api-docs to use and test the server API directly.

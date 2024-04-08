@@ -9,3 +9,4 @@ internal/
 .eslintcache
 *v8.log
 dev.db
+dev.db-journal
